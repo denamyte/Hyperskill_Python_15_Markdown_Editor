@@ -131,6 +131,12 @@ files:
 - name: test/__init__.py
   visible: false
   learner_created: false
+- name: editor_menus.py
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/12314#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 08 Nov 2022 23:27:31 UTC
+record: 2

@@ -1,10 +1,10 @@
-print("""
-# John Lennon
-or ***John Winston Ono Lennon*** was one of *The Beatles*.
-Here are the songs he wrote I like the most:
-* Imagine
-* Norwegian Wood
-* Come Together
-* In My Life
-* ~~Hey Jude~~ (that was *McCartney*)
-""")
+from state_machine_factory import StateMachineFactory, State
+from state_machine import StateMachineRunner
+from editor_menus import EditorMenus
+
+
+menus = EditorMenus()
+state_dict = StateMachineFactory(menus).get_state_dict()
+smr = StateMachineRunner(state_dict, State.CHOOSE_FORMATTER.name)
+
+smr.run()
