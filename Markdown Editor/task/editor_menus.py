@@ -1,14 +1,22 @@
+import md
+
 
 class EditorMenus:
     FORMATTERS = ['plain', 'bold', 'italic',
                   'header', 'link', 'inline-code',
-                  'ordered-list', 'unordered-list', 'new-line']
-    HELP = '!help'
-    DONE = '!done'
-    SPECIAL_COMMANDS = [HELP, DONE]
+                  # 'ordered-list', 'unordered-list',
+                  'new-line']
+    SPECIAL_COMMANDS = ['!help', '!done']
 
     def __init__(self):
         self._command: str = ''
+        self._document = md.Document()
+        self._header_level = 0
+        self._text = ''
+
+    def print_document(self) -> int:
+        print(self._document)
+        return 0
 
     def choose_formatter(self) -> int:
         cmd = input('Choose a formatter: ')
@@ -24,10 +32,78 @@ class EditorMenus:
 
     def execute_command(self) -> int:
         match self._command:
-            case self.DONE:
+            case '!done':
                 return 0
-            case self.HELP:
-                print('''\
+            case '!help':
+                return 1
+            case 'header':
+                return 2
+            case 'bold':
+                return 3
+            case 'italic':
+                return 4
+            case 'plain':
+                return 5
+            case 'inline-code':
+                return 6
+            case 'new-line':
+                return 7
+            case 'link':
+                return 8
+        return 0
+
+    @staticmethod
+    def print_help() -> int:
+        print('''\
 Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line
 Special commands: !help !done''')
+        return 0
+
+    def input_header_level(self) -> int:
+        raw = input('Level: ')
+        try:
+            level = int(raw)
+            if level < 1 or level > 6:
+                return 0
+        except ValueError:
+            return 0
+        self._header_level = level
         return 1
+
+    @staticmethod
+    def input_header_level_error() -> int:
+        print('The level should be within the range of 1 to 6')
+        return 0
+
+    def input_header_text(self) -> int:
+        text = input('Text: ')
+        self._document.append(md.Header(text, self._header_level))
+        return self.print_document()
+
+    def input_bold(self) -> int:
+        text = input('Text: ')
+        self._document.append(md.Bold(text))
+        return self.print_document()
+
+    def input_italic(self) -> int:
+        text = input('Text: ')
+        self._document.append(md.Italic(text))
+        return self.print_document()
+
+    def input_plain(self) -> int:
+        text = input('Text: ')
+        self._document.append(md.Plain(text))
+        return self.print_document()
+
+    def input_inline_code(self) -> int:
+        text = input('Text: ')
+        self._document.append(md.InlineCode(text))
+        return self.print_document()
+
+    def input_new_line(self) -> int:
+        self._document.append(md.NewLine())
+        return self.print_document()
+
+    def input_link(self) -> int:
+        self._document.append(md.Link(input('Label: '), input('URL: ')))
+        return self.print_document()

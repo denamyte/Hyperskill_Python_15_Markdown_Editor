@@ -230,6 +230,12 @@ files:
     Special commands: !help !done''')
             return 1
   learner_created: true
+- name: md.py
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/12315#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 09 Nov 2022 09:25:41 UTC
 record: -1
