@@ -35,6 +35,7 @@ class EditorMenus:
     def execute_command(self) -> int:
         match self._command:
             case '!done':
+                self._save_results()
                 return 0
             case '!help':
                 return 1
@@ -129,3 +130,7 @@ Special commands: !help !done''')
         rows = [input(f'Row #{i + 1}: ') for i in range(self._rows_number)]
         self._document.append(md.MDList(self._ordered_list, rows))
         return self.print_document()
+
+    def _save_results(self):
+        with open('output.md', 'w') as output:
+            output.write(str(self._document))
