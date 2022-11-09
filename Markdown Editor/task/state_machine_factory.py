@@ -19,6 +19,9 @@ class State(Enum):
     INPUT_INLINE_CODE = auto()
     INPUT_NEW_LINE = auto()
     INPUT_LINK = auto()
+    INPUT_LIST_NUMBER_OF_ROWS = auto()
+    INPUT_LIST_NUMBER_OF_ROWS_ERROR = auto()
+    INPUT_LIST_ROWS = auto()
 
     EXIT = auto()
 
@@ -49,6 +52,7 @@ class StateMachineFactory:
                              6: State.INPUT_INLINE_CODE.name,
                              7: State.INPUT_NEW_LINE.name,
                              8: State.INPUT_LINK.name,
+                             9: State.INPUT_LIST_NUMBER_OF_ROWS.name,
                              },
                             self._menus.execute_command),
 
@@ -92,6 +96,19 @@ class StateMachineFactory:
             StateTransition(State.INPUT_LINK.name,
                             {0: State.CHOOSE_FORMATTER.name},
                             self._menus.input_link),
+
+            StateTransition(State.INPUT_LIST_NUMBER_OF_ROWS.name,
+                            {0: State.INPUT_LIST_NUMBER_OF_ROWS_ERROR.name,
+                             1: State.INPUT_LIST_ROWS.name},
+                            self._menus.input_list_number_of_rows),
+
+            StateTransition(State.INPUT_LIST_NUMBER_OF_ROWS_ERROR.name,
+                            {0: State.INPUT_LIST_NUMBER_OF_ROWS.name},
+                            self._menus.input_list_number_of_rows_error),
+
+            StateTransition(State.INPUT_LIST_ROWS.name,
+                            {0: State.CHOOSE_FORMATTER.name},
+                            self._menus.input_list_rows),
 
             StateTransition(State.EXIT.name,
                             {0: ''},

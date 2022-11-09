@@ -4,7 +4,7 @@ import md
 class EditorMenus:
     FORMATTERS = ['plain', 'bold', 'italic',
                   'header', 'link', 'inline-code',
-                  # 'ordered-list', 'unordered-list',
+                  'ordered-list', 'unordered-list',
                   'new-line']
     SPECIAL_COMMANDS = ['!help', '!done']
 
@@ -13,6 +13,8 @@ class EditorMenus:
         self._document = md.Document()
         self._header_level = 0
         self._text = ''
+        self._rows_number = 0
+        self._ordered_list = False
 
     def print_document(self) -> int:
         print(self._document)
@@ -50,6 +52,9 @@ class EditorMenus:
                 return 7
             case 'link':
                 return 8
+            case 'ordered-list' | 'unordered-list' as lst:
+                self._ordered_list = lst == 'ordered-list'
+                return 9
         return 0
 
     @staticmethod
@@ -106,4 +111,21 @@ Special commands: !help !done''')
 
     def input_link(self) -> int:
         self._document.append(md.Link(input('Label: '), input('URL: ')))
+        return self.print_document()
+
+    def input_list_number_of_rows(self) -> int:
+        try:
+            self._rows_number = int(input('Number of rows: '))
+            return 0 if self._rows_number <= 0 else 1
+        except ValueError:
+            return 0
+
+    @staticmethod
+    def input_list_number_of_rows_error() -> int:
+        print('The number of rows should be greater than zero')
+        return 0
+
+    def input_list_rows(self) -> int:
+        rows = [input(f'Row #{i + 1}: ') for i in range(self._rows_number)]
+        self._document.append(md.MDList(self._ordered_list, rows))
         return self.print_document()

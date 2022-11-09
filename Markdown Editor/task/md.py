@@ -66,6 +66,18 @@ class Link(MDBase):
         return self.F_STR.format(label=self._label, url=self._url)
 
 
+class MDList(MDBase):
+    def __init__(self, ordered: bool, rows: List[str]):
+        self._ordered = ordered
+        self._rows = rows[:]
+
+    def render(self) -> str:
+        rows_gen = (f'{i + 1}. {self._rows[i]}' for i in range(len(self._rows)))\
+            if self._ordered\
+            else (f'* {self._rows[i]}' for i in range(len(self._rows)))
+        return '\n'.join(rows_gen) + '\n'
+
+
 class Document(MDBase):
     def __init__(self):
         self._parts: List[MDBase] = []
